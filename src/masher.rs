@@ -2,6 +2,7 @@ use crate::{errors, mashable};
 use std::{fmt, ops};
 
 /// Wrapper for base36 strings
+#[derive(Debug, Clone, PartialEq)]
 pub struct Masher {
     value_36: String,
 }
@@ -54,14 +55,32 @@ impl Masher {
     }
 }
 
+impl ops::AddAssign for Masher {
+    fn add_assign(&mut self, snd: Self) {
+        let n1 = Masher::from_base36(self.to_string());
+        let n2 = Masher::from_base36(snd.to_string());
+        *self = Self {
+            value_36: Masher::to_base36(n1 + n2),
+        }
+    }
+}
+
 impl ops::Add<Masher> for Masher {
     type Output = Masher;
 
     fn add(self, snd: Masher) -> Masher {
+        let mut cloned_self = self.clone();
+        cloned_self += snd;
+        cloned_self
+    }
+}
+
+impl ops::MulAssign for Masher {
+    fn mul_assign(&mut self, snd: Self) {
         let n1 = Masher::from_base36(self.to_string());
         let n2 = Masher::from_base36(snd.to_string());
-        Masher {
-            value_36: Masher::to_base36(n1 + n2),
+        *self = Self {
+            value_36: Masher::to_base36(n1 * n2),
         }
     }
 }
@@ -70,11 +89,9 @@ impl ops::Mul<Masher> for Masher {
     type Output = Masher;
 
     fn mul(self, snd: Masher) -> Masher {
-        let n1 = Masher::from_base36(self.to_string());
-        let n2 = Masher::from_base36(snd.to_string());
-        Masher {
-            value_36: Masher::to_base36(n1 * n2),
-        }
+        let mut cloned_self = self.clone();
+        cloned_self *= snd;
+        cloned_self
     }
 }
 

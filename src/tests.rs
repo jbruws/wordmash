@@ -56,3 +56,12 @@ fn multiplication() {
     assert_eq!(boar_num * damned_num, 437897150155935);
     assert_eq!(Masher::to_base36(boar_num * damned_num), "4B7Z6917DR");
 }
+
+#[test]
+fn assign_add_mul() {
+    let mut m_ass = Masher::new("PRIME").unwrap();
+    let m_dummy = Masher::new("PRIME").unwrap();
+    let m_movd = Masher::new("SECONDARY").unwrap();
+    m_ass += m_movd.clone();
+    assert_eq!(m_ass, m_dummy + m_movd);
+}

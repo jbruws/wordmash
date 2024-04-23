@@ -14,4 +14,5 @@ pub mod mashable;
 /// `Masher` struct
 pub mod masher;
 
+#[cfg(test)]
 mod tests;
