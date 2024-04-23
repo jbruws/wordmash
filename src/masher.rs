@@ -1,24 +1,26 @@
 use crate::{errors, mashable};
 use std::{fmt, ops};
 
+/// Wrapper for base36 strings
 pub struct Masher {
     value_36: String,
 }
 
 impl Masher {
+    /// All symbols that can be used in base36 strings. `Mashable` checks against it when
+    /// converting `String`s and `&str`s.
     const BASE_36_ALPHABET: &'static str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    /// Tries to construct a new `Masher` from `Mashable` object
     pub fn new(val: impl mashable::Mashable) -> Result<Masher, errors::Base36AlphabetError> {
         let vs = val.to_mashed_string();
-        if vs.is_ok() {
-            Ok(Masher {
-                value_36: vs.unwrap(),
-            })
-        } else {
-            Err(errors::Base36AlphabetError)
+        match vs {
+            Ok(v) => Ok(Masher { value_36: v }),
+            Err(e) => Err(e),
         }
     }
 
+    /// Checks strings for illegal values (values not in `BASE_36_ALPHABET`)
     pub fn is_mashable(val: String) -> bool {
         for i in val.chars() {
             if !Masher::BASE_36_ALPHABET.contains(i) {
@@ -28,6 +30,7 @@ impl Masher {
         true
     }
 
+    /// Converts from base36 string to base10 integer
     pub fn from_base36(raw_number: String) -> u128 {
         let mut result: u128 = 0;
         let number = raw_number.to_uppercase();
@@ -40,11 +43,12 @@ impl Masher {
         result
     }
 
+    /// Converts from base10 integer to base36 string
     pub fn to_base36(mut number: u128) -> String {
         let mut result: String = String::new();
         while number > 0 {
             result.push(Masher::BASE_36_ALPHABET.as_bytes()[(number % 36) as usize] as char);
-            number = number / 36;
+            number /= 36;
         }
         result.chars().rev().collect::<String>()
     }

@@ -30,6 +30,18 @@ fn illegal_initialization() {
 }
 
 #[test]
+fn masher_from_unsigned() {
+    let m1 = Masher::new(19u8).unwrap();
+    let m2 = Masher::new(190u8).unwrap();
+    let m3 = Masher::new(15789u16).unwrap();
+    let m4 = Masher::new(1578990u32).unwrap();
+    assert_eq!(m1.to_string(), "J");
+    assert_eq!(m2.to_string(), "5A");
+    assert_eq!(m3.to_string(), "C6L");
+    assert_eq!(m4.to_string(), "XUCU");
+}
+
+#[test]
 fn addition() {
     let cat_num: u128 = Masher::from_base36(String::from("CAT"));
     let crux_num: u128 = Masher::from_base36(String::from("CRUX"));

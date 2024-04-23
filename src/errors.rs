@@ -1,5 +1,6 @@
 use std::fmt;
 
+/// Error for illegal values that cannot be converted to base36
 pub struct Base36AlphabetError;
 
 impl fmt::Display for Base36AlphabetError {
