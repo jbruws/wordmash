@@ -23,8 +23,10 @@ fn conversion_to_base36() {
 fn illegal_initialization() {
     let mash1 = Masher::new("ALLISNORMALBUT_UNDERSCORE");
     let mash2 = Masher::new("кирилица)");
+    let mash3 = Masher::new("НАТЕ"); // actually cyrillic
     assert!(mash1.is_err());
     assert!(mash2.is_err());
+    assert!(mash3.is_err());
 }
 
 #[test]
