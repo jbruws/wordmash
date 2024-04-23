@@ -1,5 +1,5 @@
 use crate::{errors, mashable};
-use rug::{Assign, Integer};
+use rug::{Integer, Assign};
 use std::{fmt, ops};
 
 /// Wrapper for base36 strings
@@ -41,17 +41,8 @@ impl Masher {
     }
 
     /// Converts from base10 integer to base36 string
-    pub fn to_base36(mut number: Integer) -> String {
-        let mut result: String = String::new();
-        while number > 0 {
-            result.push(
-                Masher::BASE_36_ALPHABET.as_bytes()[(number.clone().modulo(&Integer::from(36)))
-                    .to_usize()
-                    .unwrap()] as char,
-            );
-            number /= 36;
-        }
-        result.chars().rev().collect::<String>()
+    pub fn to_base36(number: Integer) -> String {
+        number.to_string_radix(36).to_uppercase()
     }
 }
 

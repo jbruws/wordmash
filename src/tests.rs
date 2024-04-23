@@ -1,6 +1,6 @@
 use crate::*;
 use masher::Masher;
-use rug::{Assign, Integer};
+use rug::Integer;
 
 #[test]
 fn conversion_to_decimal() {
@@ -68,4 +68,17 @@ fn assign_add_mul() {
     let m_movd = Masher::new("SECONDARY").unwrap();
     m_ass += m_movd.clone();
     assert_eq!(m_ass, m_dummy + m_movd);
+}
+
+#[test]
+fn masher_to_string() {
+    let m = Masher::new(34u32).unwrap();
+    assert_eq!(m.to_string(), "Y");
+}
+
+#[test]
+fn conversion_to_uppercase() {
+    let m = Masher::new("qetqe");
+    assert!(m.is_ok());
+    assert_eq!(Masher::from_base36(m.unwrap().to_string()), 44361734)
 }

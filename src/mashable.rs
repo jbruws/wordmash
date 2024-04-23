@@ -1,6 +1,6 @@
 use crate::errors::Base36AlphabetError;
 use crate::masher::Masher;
-use rug::{Assign, Integer};
+use rug::Integer;
 
 /// Generates `Mashable` implementations for given types. Only produces usable code when given
 /// types can be converted to `rug::Integer`.
@@ -24,8 +24,8 @@ impl_mashable_for_unsigned!(u8, u16, u32, u64, u128);
 
 impl Mashable for String {
     fn to_mashed_string(self) -> Result<String, Base36AlphabetError> {
-        if Masher::is_mashable(self.clone()) {
-            Ok(self)
+        if Masher::is_mashable(self.clone().to_uppercase()) {
+            Ok(self.to_uppercase())
         } else {
             Err(Base36AlphabetError)
         }
@@ -35,8 +35,8 @@ impl Mashable for String {
 impl Mashable for &str {
     fn to_mashed_string(self) -> Result<String, Base36AlphabetError> {
         let val = self.to_string();
-        if Masher::is_mashable(val.clone()) {
-            Ok(val)
+        if Masher::is_mashable(val.clone().to_uppercase()) {
+            Ok(val.to_uppercase())
         } else {
             Err(Base36AlphabetError)
         }
