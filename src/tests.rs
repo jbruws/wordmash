@@ -1,10 +1,11 @@
 use crate::*;
+use masher::Masher;
 
 #[test]
 fn conversion_to_decimal() {
-    let dog_num: u64 = Masher::from_base36(String::from("DOG"));
-    let zinc_num: u64 = Masher::from_base36(String::from("ZINC"));
-    let walnut_num: u64 = Masher::from_base36(String::from("WALNUT"));
+    let dog_num: u128 = Masher::from_base36(String::from("DOG"));
+    let zinc_num: u128 = Masher::from_base36(String::from("ZINC"));
+    let walnut_num: u128 = Masher::from_base36(String::from("WALNUT"));
     assert_eq!(dog_num, 17728);
     assert_eq!(zinc_num, 1657128);
     assert_eq!(walnut_num, 1952724485);
@@ -19,17 +20,25 @@ fn conversion_to_base36() {
 }
 
 #[test]
+fn illegal_initialization() {
+    let mash1 = Masher::new("ALLISNORMALBUT_UNDERSCORE");
+    let mash2 = Masher::new("кирилица)");
+    assert!(mash1.is_err());
+    assert!(mash2.is_err());
+}
+
+#[test]
 fn addition() {
-    let cat_num: u64 = Masher::from_base36(String::from("CAT"));
-    let crux_num: u64 = Masher::from_base36(String::from("CRUX"));
+    let cat_num: u128 = Masher::from_base36(String::from("CAT"));
+    let crux_num: u128 = Masher::from_base36(String::from("CRUX"));
     assert_eq!(cat_num + crux_num, 611918);
     assert_eq!(Masher::to_base36(cat_num + crux_num), "D45Q");
 }
 
 #[test]
 fn multiplication() {
-    let boar_num: u64 = Masher::from_base36(String::from("BOAR"));
-    let damned_num: u64 = Masher::from_base36(String::from("DAMNED"));
+    let boar_num: u128 = Masher::from_base36(String::from("BOAR"));
+    let damned_num: u128 = Masher::from_base36(String::from("DAMNED"));
     assert_eq!(boar_num * damned_num, 437897150155935);
     assert_eq!(Masher::to_base36(boar_num * damned_num), "4B7Z6917DR");
 }

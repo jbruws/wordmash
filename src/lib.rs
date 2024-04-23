@@ -1,4 +1,4 @@
 pub mod masher;
-pub use masher::Masher;
+pub mod errors;
 
 mod tests;

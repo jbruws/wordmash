@@ -1,4 +1,5 @@
 use std::{ops, fmt};
+use crate::errors;
 
 pub struct Masher {
     value_36: String,
@@ -7,20 +8,26 @@ pub struct Masher {
 impl Masher {
     const BASE_36_ALPHABET: &'static str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    pub fn new(val: impl Into<String>) -> Masher {
-        Masher { value_36: val.into() }
+    pub fn new(val: impl Into<String>) -> Result<Masher, errors::Base36AlphabetError> {
+        let vs: String = val.into();
+        for i in vs.chars() {
+            if !Masher::BASE_36_ALPHABET.contains(i) {
+                return Err(errors::Base36AlphabetError);
+            }
+        }
+        Ok(Masher { value_36: vs })
     }
 
-    pub fn from_base36(raw_number: String) -> u64 {
-        let mut result: u64 = 0;
+    pub fn from_base36(raw_number: String) -> u128 {
+        let mut result: u128 = 0;
         let number = raw_number.to_uppercase();
         for (i, v) in number.chars().rev().enumerate() {
-            result += 36u64.pow(i as u32) * Masher::BASE_36_ALPHABET.find(v).expect("Symbol not found in base 36 alphabet") as u64;
+            result += 36u128.pow(i as u32) * Masher::BASE_36_ALPHABET.find(v).expect("Symbol not found in base 36 alphabet") as u128;
         }
         result
     }
 
-    pub fn to_base36(mut number: u64) -> String {
+    pub fn to_base36(mut number: u128) -> String {
         let mut result: String = String::new();
         while number > 0 {
             result.push(Masher::BASE_36_ALPHABET.as_bytes()[(number % 36) as usize] as char);
