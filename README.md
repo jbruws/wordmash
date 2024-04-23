@@ -1,6 +1,6 @@
 # wordmash
 
-Crate that allows arithmetic operations on strings by representing them as base 36 numbers. 
+Crate that allows arithmetic operations on strings by representing them as base36 numbers. 
 
 This is done through the `Masher` struct, which can construct base36 numbers from all types implementing `Mashable` trait and perform arithmetics by reverting them back to base10. 
 

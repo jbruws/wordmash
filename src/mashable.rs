@@ -1,13 +1,14 @@
 use crate::errors::Base36AlphabetError;
 use crate::masher::Masher;
+use rug::{Assign, Integer};
 
 /// Generates `Mashable` implementations for given types. Only produces usable code when given
-/// types can be converted to `u128`.
+/// types can be converted to `rug::Integer`.
 macro_rules! impl_mashable_for_unsigned {
     ($($s:ty),+) => {
         $(impl Mashable for $s {
             fn to_mashed_string(self) -> Result<String, Base36AlphabetError> {
-                Ok(Masher::to_base36(self as u128))
+                Ok(Masher::to_base36(Integer::from(self)))
             }
         })*
     }

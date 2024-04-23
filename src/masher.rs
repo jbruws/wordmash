@@ -1,4 +1,5 @@
 use crate::{errors, mashable};
+use rug::{Assign, Integer};
 use std::{fmt, ops};
 
 /// Wrapper for base36 strings
@@ -32,23 +33,22 @@ impl Masher {
     }
 
     /// Converts from base36 string to base10 integer
-    pub fn from_base36(raw_number: String) -> u128 {
-        let mut result: u128 = 0;
+    pub fn from_base36(raw_number: String) -> Integer {
+        let mut result = Integer::new();
         let number = raw_number.to_uppercase();
-        for (i, v) in number.chars().rev().enumerate() {
-            result += 36u128.pow(i as u32)
-                * Masher::BASE_36_ALPHABET
-                    .find(v)
-                    .expect("Symbol not found in base 36 alphabet") as u128;
-        }
+        result.assign(Integer::parse_radix(number, 36).unwrap());
         result
     }
 
     /// Converts from base10 integer to base36 string
-    pub fn to_base36(mut number: u128) -> String {
+    pub fn to_base36(mut number: Integer) -> String {
         let mut result: String = String::new();
         while number > 0 {
-            result.push(Masher::BASE_36_ALPHABET.as_bytes()[(number % 36) as usize] as char);
+            result.push(
+                Masher::BASE_36_ALPHABET.as_bytes()[(number.clone().modulo(&Integer::from(36)))
+                    .to_usize()
+                    .unwrap()] as char,
+            );
             number /= 36;
         }
         result.chars().rev().collect::<String>()
