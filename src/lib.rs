@@ -1,7 +1,7 @@
 //! # wordmash - String Arithmetics Library
 //!
 //! This crate makes it possible to perform arithmetic operations on strings by representing them
-//! as base36 numbers. This is done through the `Masher` struct, which can construct base36
+//! as Masher numbers (numbers using a specialised alphabet). This is done through the `Masher` struct, which can construct such
 //! numbers from all types implementing `Mashable` trait (currently all unsigned integer types,
 //! `String` and `&str`) and perform arithmetics by reverting them back to base10.
 

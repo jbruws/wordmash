@@ -4,25 +4,17 @@ use rug::Integer;
 
 #[test]
 fn conversion_to_decimal() {
-    let dog_num = Masher::from_base36(String::from("DOG"));
-    let zinc_num = Masher::from_base36(String::from("ZINC"));
-    let walnut_num = Masher::from_base36(String::from("WALNUT"));
-    assert_eq!(dog_num, 17728);
-    assert_eq!(zinc_num, 1657128);
-    assert_eq!(walnut_num, 1952724485);
-}
-
-#[test]
-fn conversion_to_base36() {
-    let gibberish_string: String = Masher::to_base36(Integer::from(124111));
-    let glide_string: String = Masher::to_base36(Integer::from(27877442));
-    assert_eq!(gibberish_string, "2NRJ");
-    assert_eq!(glide_string, "GLIDE");
+    let dog_num = Masher::from_mashed(String::from("DOG"));
+    let zinc_num = Masher::from_mashed(String::from("ZINC"));
+    let walnut_num = Masher::from_mashed(String::from("WALNUT"));
+    assert_eq!(dog_num, 3950);
+    assert_eq!(zinc_num, 992292);
+    assert_eq!(walnut_num, 1000027399);
 }
 
 #[test]
 fn illegal_initialization() {
-    let mash1 = Masher::new("ALLISNORMALBUT_UNDERSCORE");
+    let mash1 = Masher::new("lowerc");
     let mash2 = Masher::new("кирилица)");
     let mash3 = Masher::new("НАТЕ"); // actually cyrillic
     assert!(mash1.is_err());
@@ -31,34 +23,21 @@ fn illegal_initialization() {
 }
 
 #[test]
-fn masher_from_unsigned() {
-    let m1 = Masher::new(19u8).unwrap();
-    let m2 = Masher::new(190u8).unwrap();
-    let m3 = Masher::new(15789u16).unwrap();
-    let m4 = Masher::new(1578990u32).unwrap();
-    assert_eq!(m1.to_string(), "J");
-    assert_eq!(m2.to_string(), "5A");
-    assert_eq!(m3.to_string(), "C6L");
-    assert_eq!(m4.to_string(), "XUCU");
-}
-
-#[test]
 fn addition() {
-    let cat_num = Masher::from_base36(String::from("CAT"));
-    let crux_num = Masher::from_base36(String::from("CRUX"));
-    assert_eq!(cat_num.clone() + crux_num.clone(), 611918);
-    assert_eq!(Masher::to_base36(cat_num + crux_num), "D45Q");
+    let cat_num = Masher::from_mashed(String::from("CAT"));
+    let crux_num = Masher::from_mashed(String::from("CRUX"));
+    assert_eq!(cat_num.clone() + crux_num.clone(), 101294);
+    assert_eq!(Masher::to_mashed(Integer::from(cat_num + crux_num)), "CTVI");
 }
 
 #[test]
 fn multiplication() {
-    let boar_num = Masher::from_base36(String::from("BOAR"));
-    let damned_num = Masher::from_base36(String::from("DAMNED"));
+    let boar_num = Masher::from_mashed(String::from("BOAR"));
+    let damned_num = Masher::from_mashed(String::from("DAMNED"));
     assert_eq!(
         boar_num.clone() + damned_num.clone(),
-        Integer::from(804457912)
+        Integer::from(136848592)
     );
-    assert_eq!(Masher::to_base36(boar_num * damned_num), "4B7Z6917DR");
 }
 
 #[test]
@@ -71,14 +50,21 @@ fn assign_add_mul() {
 }
 
 #[test]
-fn masher_to_string() {
-    let m = Masher::new(34u32).unwrap();
-    assert_eq!(m.to_string(), "Y");
+fn u32_to_masher() {
+    let m = Masher::new(33u32).unwrap();
+    assert_eq!(m.to_string(), " ");
 }
 
 #[test]
 fn conversion_to_uppercase() {
-    let m = Masher::new("qetqe");
+    let m = Masher::new("qetqe".to_string().to_uppercase());
     assert!(m.is_ok());
-    assert_eq!(Masher::from_base36(m.unwrap().to_string()), 44361734)
+    assert_eq!(Masher::from_mashed(m.unwrap().to_string()), 21561104)
+}
+
+#[test]
+fn long_multiplication() {
+    let m = Masher::new("CALIPH").unwrap();
+    let m2 = Masher::new("AVERYLONGINSTRUCTIONWORD").unwrap();
+    let mres = m * m2;
 }

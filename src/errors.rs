@@ -1,18 +1,18 @@
 use std::fmt;
 
-/// Error for illegal values that cannot be converted to base36
-pub struct Base36AlphabetError;
+/// Error for illegal values that cannot be converted to given mashed alphabet
+pub struct MasherAlphabetError;
 
-impl fmt::Display for Base36AlphabetError {
+impl fmt::Display for MasherAlphabetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Value can not be represented by base 36 alphabet")
+        write!(f, "Value can not be represented by Masher alphabet")
     }
 }
 
-impl fmt::Debug for Base36AlphabetError {
+impl fmt::Debug for MasherAlphabetError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{{ file: {}, line: {} }}", file!(), line!())
+        write!(f, "Value can not be represented by Masher alphabet")
     }
 }
 
-impl std::error::Error for Base36AlphabetError {}
+impl std::error::Error for MasherAlphabetError {}
